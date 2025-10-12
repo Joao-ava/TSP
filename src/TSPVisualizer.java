@@ -19,7 +19,8 @@
 
  import java.util.ArrayList;
 import algs4.In;
-import algs4.StdDraw;
+ import algs4.Point2D;
+ import algs4.StdDraw;
 import algs4.StdOut;
 
  public class TSPVisualizer {
@@ -41,7 +42,7 @@ import algs4.StdOut;
 
         Tour nearest = new Tour();
 
-        ArrayList<Point> points = new ArrayList<Point>();
+        ArrayList<Point2D> points = new ArrayList<>();
 
         boolean redraw = false;
 
@@ -71,7 +72,7 @@ import algs4.StdOut;
                  // imprime coordenadas dos novos pontos
                  StdOut.println(x + " " + y);
  
-                 Point p = new Point(x, y);
+                 Point2D p = new Point2D(x, y);
  
                  points.add(p);
  
@@ -109,7 +110,7 @@ import algs4.StdOut;
                  double x = StdDraw.mouseX();
                  double y = StdDraw.mouseY();
  
-                Point p = new Point(x, y);
+                Point2D p = new Point2D(x, y);
 
                 points.add(p);
 
@@ -141,7 +142,7 @@ import algs4.StdOut;
                 // desenha todos os pontos
                 StdDraw.setPenColor(StdDraw.BLACK);
                 StdDraw.setPenRadius(0.005);
-                for (Point p : points)
+                for (Point2D p : points)
                     p.draw();
 
                 // imprime legendas

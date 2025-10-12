@@ -14,6 +14,7 @@
  *
  **************************************************************************** */
 
+ import algs4.Point2D;
  import algs4.StdRandom;
  import algs4.Stopwatch;
  import algs4.StdOut;
@@ -28,11 +29,11 @@
         // gerar dados e executar a heurística de inserção pelo vizinho mais próximo
         StdRandom.setSeed(123456789L);
         Stopwatch timer1 = new Stopwatch();
-        Tour tour1 = new Tour();
+        Tour tour1 = new Tour(true);
         for (int i = 0; i < n; i++) {
             double x = StdRandom.uniformDouble(lo, hi);
             double y = StdRandom.uniformDouble(lo, hi);
-            Point p = new Point(x, y);
+            Point2D p = new Point2D(x, y);
             tour1.insertNearest(p);
         }
         double length1 = tour1.length();
