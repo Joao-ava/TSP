@@ -148,7 +148,7 @@ public class Tour {
         }
         Point2D nearest = kdTree.nearest(p);
         Node current = start;
-        while (!current.point.equals(nearest)) {
+        while (current.point != nearest) {
             current = current.next;
         }
         Node newNode = new Node(p);
