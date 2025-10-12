@@ -14,18 +14,18 @@
  *
  **************************************************************************** */
 
- import algs4.Point2D;
- import algs4.StdRandom;
- import algs4.Stopwatch;
- import algs4.StdOut;
- 
- public class TSPTimer {
- 
-     public static void main(String[] args) {
-         double lo = 0.0;
-         double hi = 600.0;
-         int n = Integer.parseInt(args[0]);
- 
+import algs4.Point2D;
+import algs4.StdRandom;
+import algs4.Stopwatch;
+import algs4.StdOut;
+
+public class TSPTimer {
+
+    public static void main(String[] args) {
+        double lo = 0.0;
+        double hi = 600.0;
+        int n = Integer.parseInt(args[0]);
+
         // gerar dados e executar a heurística de inserção pelo vizinho mais próximo
         StdRandom.setSeed(123456789L);
         Stopwatch timer1 = new Stopwatch();
@@ -40,9 +40,5 @@
         double elapsed1 = timer1.elapsedTime();
         StdOut.println("Comprimento do ciclo = " + length1);
         StdOut.println("Inserção pelo vizinho mais próximo: " + elapsed1 + " segundos");
-        StdOut.println();
-
-        StdOut.println("Inserção pelo menor aumento: funcionalidade removida");
     }
 }
- 
