@@ -7,16 +7,21 @@ import algs4.StdOut;
  * Template da classe Tour para a heurística do vizinho mais próximo.
  *
  * Primeira etapa sugerida:
- *  - implemente os métodos de lista encadeada e chame {@link #insertNearestNaive(Point)}.
+ *  - implemente os métodos de lista encadeada e chame {@link #insertNearestNaive(Point2D)}.
  * Segunda etapa:
- *  - implemente a classe algs4.KdTree e utilize {@link #insertNearestKd(Point)}
+ *  - implemente a classe algs4.KdTree e utilize {@link #insertNearestKd(Point2D)}
  *    para acelerar a busca do vizinho mais próximo.
  */
 public class Tour {
 
     private static class Node {
-        private Point point;
+        private Point2D point;
         private Node next;
+
+        public Node(Point2D point) {
+            this.point = point;
+            this.next = null;
+        }
     }
 
     private Node start;
@@ -37,28 +42,56 @@ public class Tour {
         }
     }
 
-    public Tour(Point a, Point b, Point c, Point d) {
+    public Tour(Point2D a, Point2D b, Point2D c, Point2D d) {
         this();
         throw new UnsupportedOperationException("Implementar construtor de depuração");
     }
 
     public int size() {
-        throw new UnsupportedOperationException("Implementar size()");
+        if (useKdTree) {
+            return kdTree.size();
+        } else {
+            return count;
+        }
     }
 
     public double length() {
-        throw new UnsupportedOperationException("Implementar length()");
+        double distance = 0d;
+        Node current = start;
+        while (current.next != start) {
+            distance += current.point.distanceTo(current.next.point);
+            current = current.next;
+        }
+        distance += current.point.distanceTo(current.next.point);
+        return distance;
     }
 
     public String toString() {
-        throw new UnsupportedOperationException("Implementar toString()");
+        StringBuilder sb = new StringBuilder();
+        if (start == null)
+            return "(Tour vazio)";
+
+        Node current = start;
+        do {
+            sb.append(current.point.toString()).append("\n");
+            current = current.next;
+        } while (current != start);
+
+        return sb.toString();
     }
 
     public void draw() {
-        throw new UnsupportedOperationException("Implementar draw()");
+        if (start == null || start.next == start)
+            return;
+
+        Node current = start;
+        do {
+            current.point.drawTo(current.next.point);
+            current = current.next;
+        } while (current != start);
     }
 
-    public void insertNearest(Point p) {
+    public void insertNearest(Point2D p) {
         if (useKdTree) {
             insertNearestKd(p);
         } else {
@@ -68,10 +101,10 @@ public class Tour {
 
     /**
      * Versão ingênua: percorre toda a lista, calcula a distância para cada nó
-     * usando {@link Point#distanceTo(Point)} e insere o novo ponto após o vizinho
+     * usando {@link Point2D#distanceTo(Point2D)} e insere o novo ponto após o vizinho
      * mais próximo encontrado.
      */
-    public void insertNearestNaive(Point p) {
+    public void insertNearestNaive(Point2D p) {
         throw new UnsupportedOperationException("Implementar insertNearestNaive(Point)");
     }
 
@@ -80,16 +113,32 @@ public class Tour {
      * ponto mais próximo e insere o novo nó na lista. Requer que a classe
      * algs4.KdTree esteja totalmente implementada.
      */
-    public void insertNearestKd(Point p) {
-        throw new UnsupportedOperationException("Implementar insertNearestKd(Point)");
+    public void insertNearestKd(Point2D p) {
+        if (start == null) {
+            start = new Node(p);
+            start.next = start;
+            count++;
+            kdTree.insert(p);
+            return;
+        }
+        Point2D nearest = kdTree.nearest(p);
+        Node current = start;
+        while (!current.point.equals(nearest)) {
+            current = current.next;
+        }
+        Node newNode = new Node(p);
+        newNode.next = current.next;
+        current.next = newNode;
+        count++;
+        kdTree.insert(p);
     }
 
     public static void main(String[] args) {
         Tour tour = new Tour();
-        tour.insertNearest(new Point(1.0, 1.0));
-        tour.insertNearest(new Point(1.0, 4.0));
-        tour.insertNearest(new Point(4.0, 4.0));
-        tour.insertNearest(new Point(4.0, 1.0));
+        tour.insertNearest(new Point2D(1.0, 1.0));
+        tour.insertNearest(new Point2D(1.0, 4.0));
+        tour.insertNearest(new Point2D(4.0, 4.0));
+        tour.insertNearest(new Point2D(4.0, 1.0));
 
         StdOut.println("# de pontos = " + tour.size());
         StdOut.println("Comprimento = " + tour.length());
