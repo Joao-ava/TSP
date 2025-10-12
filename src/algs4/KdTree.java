@@ -43,41 +43,45 @@ public class KdTree {
 
     private void insert(Point2D p, Node n, boolean isX) {
         Point2D value = n.value;
-        Comparator<Point2D> comparator = isX ? Point2D.X_ORDER : Point2D.Y_ORDER;
-        if (comparator.compare(value, p) > 0) {
+        double compare = isX ? (p.x() - value.x()) : (p.y() - value.y());
+        if (compare < 0) {
+            // p < value, vai para a esquerda
+            if (n.left != null) {
+                insert(p, n.left, !isX);
+                return;
+            }
+            n.left = new Node(p);
+        } else {
+            // p >= value, vai para a direita
             if (n.right != null) {
                 insert(p, n.right, !isX);
                 return;
             }
             n.right = new Node(p);
-            return;
         }
-        if (n.left != null) {
-            insert(p, n.left, !isX);
-            return;
-        }
-        n.left = new Node(p);
     }
 
     public boolean contains(Point2D p) {
+        if (p == null) throw new IllegalArgumentException("point is null");
         return contains(p, root, true);
     }
 
     private boolean contains(Point2D p, Node n, boolean isX) {
+        if (n == null) return false;
         Point2D value = n.value;
         if (value.equals(p)) return true;
-        Comparator<Point2D> comparator = isX ? Point2D.X_ORDER : Point2D.Y_ORDER;
-        if (comparator.compare(value, p) > 0) {
-            if (n.right == null) return false;
+
+        double compare = isX ? (p.x() - value.x()) : (p.y() - value.y());
+        if (compare < 0) {
+            // p < value, busca na esquerda
+            return contains(p, n.left, !isX);
+        } else {
+            // p >= value, busca na direita
             return contains(p, n.right, !isX);
         }
-        if (n.left == null) return false;
-        return contains(p, n.left, !isX);
     }
 
     public Point2D nearest(Point2D p) {
-        if (p == null) throw new IllegalArgumentException("point is null");
-        if (root == null) return null;
         return nearest(p, root, true, root.value);
     }
 
@@ -92,15 +96,18 @@ public class KdTree {
             best = value;
         }
 
-        Comparator<Point2D> comparator = isX ? Point2D.X_ORDER : Point2D.Y_ORDER;
         Node nextNode;
         Node otherNode;
-        if (comparator.compare(value, p) > 0) {
-            nextNode = n.right;
-            otherNode = n.left;
-        } else {
+
+        double compare = isX ? (p.x() - value.x()) : (p.y() - value.y());
+        if (compare < 0) {
+            // p < value, lado bom é a esquerda
             nextNode = n.left;
             otherNode = n.right;
+        } else {
+            // p >= value, lado bom é a direita
+            nextNode = n.right;
+            otherNode = n.left;
         }
 
         best = nearest(p, nextNode, !isX, best);
