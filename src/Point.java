@@ -48,6 +48,7 @@ public class Point {
 
     // lê um arquivo TSP da entrada padrão
     // e plota os pontos na tela padrão
+    
     public static void main(String[] args) {
 
         // obtém as dimensões

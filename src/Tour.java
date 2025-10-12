@@ -43,8 +43,11 @@ public class Tour {
     }
 
     public Tour(Point2D a, Point2D b, Point2D c, Point2D d) {
-        this();
-        throw new UnsupportedOperationException("Implementar construtor de depuração");
+        this(); 
+        insertNearestNaive(a);
+        insertNearestNaive(b);
+        insertNearestNaive(c);
+        insertNearestNaive(d);
     }
 
     public int size() {
@@ -105,7 +108,29 @@ public class Tour {
      * mais próximo encontrado.
      */
     public void insertNearestNaive(Point2D p) {
-        throw new UnsupportedOperationException("Implementar insertNearestNaive(Point)");
+        Node newNode = new Node(p);
+
+        if (start == null) {
+            newNode.next = newNode;
+            start = newNode;
+        } else {
+            Node current = start;
+            Node nearest = start;
+            double minDist = p.distanceTo(start.point);
+
+            do {
+                double dist = p.distanceTo(current.point);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearest = current;
+                }
+                current = current.next;
+            } while (current != start);
+
+            newNode.next = nearest.next;
+            nearest.next = newNode;
+        }
+        count++;
     }
 
     /**

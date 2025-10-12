@@ -27,6 +27,7 @@ public class TSPTimer {
         int n = Integer.parseInt(args[0]);
 
         // gerar dados e executar a heurística de inserção pelo vizinho mais próximo
+        StdOut.println("KdTree: ");
         StdRandom.setSeed(123456789L);
         Stopwatch timer1 = new Stopwatch();
         Tour tour1 = new Tour(true);
@@ -40,5 +41,20 @@ public class TSPTimer {
         double elapsed1 = timer1.elapsedTime();
         StdOut.println("Comprimento do ciclo = " + length1);
         StdOut.println("Inserção pelo vizinho mais próximo: " + elapsed1 + " segundos");
+        
+        StdOut.println("Ingênua: ");
+        StdRandom.setSeed(123456789L);
+        Stopwatch timer2 = new Stopwatch();
+        Tour tour2 = new Tour(false); // Ingênuo
+        for (int i = 0; i < n; i++) {
+            double x = StdRandom.uniformDouble(lo, hi);
+            double y = StdRandom.uniformDouble(lo, hi);
+            Point2D p = new Point2D(x, y);
+            tour2.insertNearest(p);
+        }
+        double length2 = tour2.length();
+        double elapsed2 = timer2.elapsedTime();
+        StdOut.println("Comprimento do ciclo = " + length2);
+        StdOut.println("Inserção pelo vizinho mais próximo: " + elapsed2 + " segundos");
     }
 }
