@@ -3,6 +3,8 @@ import algs4.Point2D;
 import algs4.StdDraw;
 import algs4.StdOut;
 
+import java.util.HashMap;
+
 /**
  * Template da classe Tour para a heurística do vizinho mais próximo.
  *
@@ -24,6 +26,7 @@ public class Tour {
         }
     }
 
+    private HashMap<Point2D, Node> nodes = new HashMap<>();
     private Node start;
     private int count;
     private final boolean useKdTree;
@@ -143,19 +146,18 @@ public class Tour {
             start = new Node(p);
             start.next = start;
             count++;
+            nodes.put(p, start);
             kdTree.insert(p);
             return;
         }
         Point2D nearest = kdTree.nearest(p);
-        Node current = start;
-        while (current.point != nearest) {
-            current = current.next;
-        }
+        Node current = nodes.get(nearest);
         Node newNode = new Node(p);
         newNode.next = current.next;
         current.next = newNode;
         count++;
         kdTree.insert(p);
+        nodes.put(p, newNode);
     }
 
     public static void main(String[] args) {
