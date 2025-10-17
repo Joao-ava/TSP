@@ -12,8 +12,12 @@ Informe abaixo o(s) nome(s):
 Q1. Explique como você implementou a heurística de inserção pelo vizinho mais próximo.
 Comente também como você atualiza as ligações da lista encadeada circular após inserir o novo ponto.
 
-Resposta: A heurística foi implementado usando a estrutura KdTree que divide os pontos em uma arvore binaria o que acaba tornando muito mais rápido para fazer o método de busca do vizinho mais proximo a métrica do vizinho mais proxímo foi usando a distância ao quatrado em vez da clássica distância euclidiana, pois a distância ao quadrado tem as mesmas propriedades para ver quão proximo são dois pontos e é mais eficiente já que para distância euclidiana usa raiz quadrada que é mais custoso computacionalmente, para atualizar é feito apenas uma busca linear até achar o elemento mais proximo retornado pela KdTree.
+Resposta: A heurística foi implementado usando a estrutura KdTree que divide os pontos numa árvore binária o que acaba tornando muito mais rápido para fazer o método de busca do vizinho mais proximo (Tornando O(log n) graças a árvore binária) a métrica do vizinho mais proxímo foi usando a distância ao quatrado em vez da clássica distância euclidiana, pois a distância ao quadrado tem as mesmas propriedades para ver quão proximo são dois pontos e é mais eficiente já que para distância euclidiana usa raiz quadrada que é mais custoso computacionalmente, para atualizar é feito uma busca do nó da lista encadeada que possui o ponto retornado pela KdTree, essa busca é feito por um HashMap para ficar mais rápido e então o novo nó é adicionado após o nó mais próximo encontrado.
+Além disso, na versão ingénua da heurística, a inserção do novo ponto é feita a percorrer toda a lista encadeada circular, calculando a distância do novo ponto para cada ponto já inserido, e inserindo o novo ponto imediatamente após o ponto mais próximo encontrado. A atualização da lista é feita ajustando os ponteiros para manter a circularidade, ou seja, o novo nó aponta para o próximo do nó encontrado, e esse nó passa a apontar para o novo nó.
 
+Análise de complexidade:
+- Método de inserção ingénuo: O(n) pois cada inserção faz uma busca linear em toda a lista encadeada circular.
+- Método KdTree: O(log n) graças a KdTree a busca pelo vizinho vira uma busca numa árvore binária O(log n) e para atualizar a lista usamos um HashMap que traz o nó em O(1).
 
 Q2. Explique por que é melhor usar uma lista encadeada circular em vez de um vetor.
 Considere a complexidade das operações de inserção e remoção de pontos.
@@ -38,14 +42,14 @@ Q4. Realize a análise de tempo abaixo:
 
 | n      | Tempo (s) ingênuo | Tempo (s) com KdTree |
 | ------ | ----------------- | -------------------- |
-| 1000   |            0.018  |                0.042 |
-| 2000   |            0.067  |                0.082 |
-| 4000   |            0.260  |                0.093 |
-| 8000   |            1.040  |                0.246 |
-| 16000  |            4.161  |                0.318 |
-| 32000  |           16.5    |                0.726 |
-| 64000  |                   |                2.114 |
-| 128000 |                   |                3.53  |
-| 256000 |                   |                7.719 |
-| 512000 |                   |               16.496 |
-| 1024000|                   |               37.713 |
+| 1000   |            0.018  |                0.013 |
+| 2000   |            0.067  |                0.029 |
+| 4000   |            0.260  |                0.033 |
+| 8000   |            1.040  |                0.058 |
+| 16000  |            4.161  |                0.121 |
+| 32000  |           16.5    |                0.338 |
+| 64000  |                   |                0.528 |
+| 128000 |                   |                1.107 |
+| 256000 |                   |                2.418 |
+| 512000 |                   |                5.068 |
+| 1024000|                   |               10.785 |
